@@ -16,10 +16,41 @@ describe LinksController do
 			get :index
 			expect(response).to render_template :index
 		end
+	end
+
+	# describe '#edit' do
+
+	# 	it 'should find by id' do
+	# 			get :edit, id: link.id 
+	# 		expect(assigns(:link)).to eq(link)
+	# 	end
+	# end
+
+	describe '#show' do
+
+		it 'should show a specific link by id' do
+			get :show, id: link.id 
+		expect(assigns(:link)).to eq(link)
+		end
+	end
+
+	describe '#new' do 
+		before :each do 
+			get :new
+		end
+
+		it 'should render new.html' do 
+			get :new 
+			expect(response).to render_template :new
+		end
+
+		# it 'should assign @link' do
+		# 	expect(assigns(:link)).to eq(Link.new)
+		# end 
 
 	end
 
-		describe '#create' do 
+	describe '#create' do 
 			before :each do 
 				@link_params = {
 					title: 'title',
@@ -32,7 +63,43 @@ describe LinksController do
 				post :create, link: @link_params #FactoryGirl.build(:link).attributes
 				}.to change(Link, :count).by(1)
 			end
-
 		end
+
+	describe '#edit' do
+
+		it 'should find by id' do
+				get :edit, id: link.id 
+			expect(assigns(:link)).to eq(link)
+		end
+	end
+
+	describe '#update' do 
+	
+		it 'should update a link' do
+			link
+			new_link = { title: "new title", url: "newurl" }
+				put :update, id: link.id, link: new_link 
+
+				link.reload
+				link.title.should == new_link[:title]
+				link.url.should == new_link[:url] 
+			end
+			
+			it 'should render index.html' do
+				get :index
+				expect(response).to render_template :index
+			end
+	
+	end
+
+	describe '#destroy' do
+	
+		it 'should delete a link' do
+			link
+			expect{
+				delete :destroy, id: link.id
+			}.to change(Link, :count).by(-1)
+		end
+	end
 
 end
